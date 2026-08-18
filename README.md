@@ -22,6 +22,7 @@ La API permite realizar operaciones CRUD sobre una colección de películas:
 * Crear nuevas películas.
 * Actualizar películas existentes.
 * Eliminar películas.
+* Uso de semillas para insercción de datos masivos
 * Gestión de errores y validaciones mediante Mongoose.
 
 ## Modelo de película

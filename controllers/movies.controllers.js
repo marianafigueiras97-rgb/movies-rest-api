@@ -134,7 +134,7 @@ const createMovie = async(req,res) =>{
         );
     }
 };
-// 7. Crear un método put de Movies para modificar una película. Incluye manejo de errores cuando el id es incorrecto o cuando no se cumple el esquema 
+// 7. Crear un método patch de Movies para modificar una película parcialmente. Incluye manejo de errores cuando el id es incorrecto o cuando no se cumple el esquema 
 const updateMovie = async (req,res) => {
 	try{
 		const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, req.body,{
@@ -160,7 +160,54 @@ const updateMovie = async (req,res) => {
 		.json({ message: "Error accediendo a la pelicual ❌",error: error.message});
 	}
 } ;
-// 8. Crear un método delete de Movies para eliminar una película. Incluye manejo de errores cuando el id no se encuentra
+
+// 8. Crear un metodo put para reemplazar una pelicula completa. Incluye manejo de errores cuando el id no se encuentra
+const replaceMovie = async (req, res) => {
+    try {
+        const { title, director, year, genre } = req.body;
+
+        // Comprobar que se han enviado todos los campos
+        if (
+            typeof title !== "string" || !title.trim() ||
+            typeof director !== "string" || !director.trim() ||
+            !Number.isInteger(year) ||
+            typeof genre !== "string" || !genre.trim()
+        ) {
+            return res.status(400).json({
+                message: "PUT requires all movie fields with valid values"
+            });
+        }
+
+        const movie = await Movie.findByIdAndUpdate(
+            req.params.id,
+            { title, director, year, genre },
+            {
+                returnDocument: "after",
+                runValidators: true
+            }
+        );
+
+        if (!movie) {
+            return res.status(404).json({
+                message: "Movie not found"
+            });
+        }
+
+        res.status(200).json(movie);
+
+    } catch (error) {
+        if (error.name === "CastError") {
+            return res.status(400).json({
+                message: "Invalid movie ID"
+            });
+        }
+
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+// 9. Crear un método delete de Movies para eliminar una película. Incluye manejo de errores cuando el id no se encuentra
 const deleteMovie = async (req, res) => {
     try {
         const deletedMovie = await Movie.findByIdAndDelete(req.params.id);
@@ -184,4 +231,4 @@ const deleteMovie = async (req, res) => {
 };
 
 //EXPORTACIONES DE CONTROLLADORES
-module.exports = {getAllMovies, getMovieById, getMovieByTitle,getMoviesByGenre,getMoviesFromYear,createMovie, updateMovie,deleteMovie};
+module.exports = {getAllMovies, getMovieById, getMovieByTitle,getMoviesByGenre,getMoviesFromYear,createMovie, replaceMovie, updateMovie,deleteMovie};

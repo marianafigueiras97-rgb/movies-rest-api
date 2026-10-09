@@ -1,4 +1,5 @@
 const swaggerJsdoc = require("swagger-jsdoc");
+const apiKeyAuth = require("./middleswares/apiKeyAuth");
 
 const options = {
     definition: {
@@ -95,6 +96,15 @@ const options = {
                             example: "Acción"
                         }
                     }
+                }
+            },
+
+            securitySchemes:{
+                ApiKeyAuth: {
+                    type: "apiKey",
+                    in: "header",
+                    name: "x-api-key",
+                    description: "API key required for write operations"
                 }
             }
         }

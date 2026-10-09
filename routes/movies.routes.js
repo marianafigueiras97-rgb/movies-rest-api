@@ -16,8 +16,10 @@ const {getAllMovies,
     updateMovie
 } = require("../controllers/movies.controllers");
 
+//IMPORTACION DEL MIDDLEWARE
+const apiKeyAuth = require("../middleswares/apiKeyAuth");
 
-// RUTAS ESPESÍFICAS
+// RUTAS ESPESÍFICAS CON DOCUMENTACION PARA SWAGGER
 /**
  * @openapi
  * /movies:
@@ -165,6 +167,8 @@ movieRouter.get("/from/:year",getMoviesFromYear);
  * /movies:
  *   post:
  *     summary: Create a new movie
+ *     security:
+ *      - ApiKeyAuth: []
  *     description: Adds a new movie to the database.
  *     tags:
  *       - Movies
@@ -203,12 +207,14 @@ movieRouter.get("/from/:year",getMoviesFromYear);
  *       500:
  *         description: Internal server error
  */
-movieRouter.post("/",createMovie);
+movieRouter.post("/",apiKeyAuth,createMovie);
 /**
  * @openapi
  * /movies/{id}:
  *   put:
  *     summary: Replace a movie
+ *     security:
+ *      - ApiKeyAuth: []
  *     description: Replaces a movie. All fields are required.
  *     tags:
  *       - Movies
@@ -239,13 +245,15 @@ movieRouter.post("/",createMovie);
  *       500:
  *         description: Internal server error
  */
-movieRouter.put("/:id",replaceMovie);
+movieRouter.put("/:id",apiKeyAuth,replaceMovie);
 
 /**
  * @openapi
  * /movies/{id}:
  *   patch:
- *     summary: Partially update a movie
+ *     summary: Partially update a movie 
+ *     security:
+ *      - ApiKeyAuth: []
  *     description: Updates one or more fields of an existing movie.
  *     tags:
  *       - Movies
@@ -276,13 +284,15 @@ movieRouter.put("/:id",replaceMovie);
  *       500:
  *         description: Internal server error
  */
-movieRouter.patch("/:id",updateMovie);
+movieRouter.patch("/:id",apiKeyAuth,updateMovie);
 
 /**
  * @openapi
  * /movies/{id}:
  *   delete:
- *     summary: Delete a movie
+ *     summary: Delete a movie 
+ *     security:
+ *      - ApiKeyAuth: []
  *     description: Deletes an existing movie by its MongoDB ID.
  *     tags:
  *       - Movies
@@ -303,7 +313,7 @@ movieRouter.patch("/:id",updateMovie);
  *       500:
  *         description: Internal server error
  */
-movieRouter.delete("/:id",deleteMovie);
+movieRouter.delete("/:id",apiKeyAuth,deleteMovie);
 
 
 

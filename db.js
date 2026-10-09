@@ -1,3 +1,5 @@
+
+/*conexion local
 // IMPORTACION DE LIBRERÍA
 const mongoose = require("mongoose");
 
@@ -11,4 +13,21 @@ const connect = async () =>{
     }
 }
 // EXPORTACION 
+module.exports = connect;
+*/
+
+//conexion a mongo atlas
+const mongoose = require ("mongoose");
+
+const connect = async () => {
+
+    try{
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log("Conectado a MongoDB Atlas");
+    } catch(error){
+        console.error("Error de conexión", error.message);
+        process.exit(1);
+    }
+};
+
 module.exports = connect;

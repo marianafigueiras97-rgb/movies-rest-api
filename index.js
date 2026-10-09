@@ -1,4 +1,5 @@
 //IMPORTACIONES LIBRERÍA, CONECCION BD Y ROUTER 
+require("dotenv").config();
 const express = require("express");
 const connect = require("./db")
 const movieRouter = require("./routes/movies.routes");
@@ -7,7 +8,7 @@ const movieRouter = require("./routes/movies.routes");
 const server = express();
 
 //DATOS DE LA URL
-const PORT = 3000
+const PORT = process.env.PORT || 3000;
 const URL = "http://localhost:"
 
 // PARA PODER USAR JSON CON EXPRESS
@@ -26,6 +27,6 @@ server.use((req,res) => {
 
 // LEVANTAMOS SERVIDOR
 server.listen(PORT, () =>{
-    console.log(`servidor levantado en ${URL + PORT}`)
+    console.log(`servidor levantado`)
 });
 

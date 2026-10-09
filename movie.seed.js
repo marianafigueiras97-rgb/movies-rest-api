@@ -1,3 +1,5 @@
+//CARGAR VARIABLES DE ENTORNO PARA CONEXCION CON MONGO ATLAS
+require("dotenv").config();
 //IMPORTACIONES DE LIBRERÍA Y MODELO 
 const mongoose = require("mongoose");
 
@@ -43,17 +45,21 @@ const moviesData = [
   },  
 ];
 
-// FUNCION QUE CONECTA -> BORRA -> INSERTA -> DESCONECTA
+// FUNCION QUE CONECTA -> VERIFICA SI HAY DATOS -> INSERTA -> DESCONECTA
 const seedDatabase = async () => {
     try {
-        await mongoose.connect("mongodb://localhost:27017/movies")
+        // conexcion local -> await mongoose.connect("mongodb://localhost:27017/movies")
+        await mongoose.connect(process.env.MONGO_URI);
         console.log("conectando con la BD")
         
-        await Movie.deleteMany();
-        console.log("borrando collecion de datos")
-        
+        const totalMovies = await Movie.countDocuments();
+        if(totalMovies > 0){
+          console.log("la conexcion ya tiene peliculas");
+          return;
+        }
         await Movie.insertMany(moviesData);
         console.log("insertados los datos")
+
     } catch (error) {
         console.error("error ejecutando la semilla", error.message);
     } finally {

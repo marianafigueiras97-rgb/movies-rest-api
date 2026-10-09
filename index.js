@@ -27,6 +27,6 @@ server.use((req,res) => {
 
 // LEVANTAMOS SERVIDOR
 server.listen(PORT, () =>{
-    console.log(`servidor levantado`)
+    console.log(`servidor funcionando en el puerto ${PORT}`);
 });
 
